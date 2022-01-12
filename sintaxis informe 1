@@ -1,0 +1,37 @@
+## Recodificación Indentificación politica: Los conceptos de izquierda y derecha son útiles para resumir de una manera muy simplificada lo que piensa la gente en muchos temas. Me gustaría que por favor se clasificara en la escala que va de 1 a 10 donde 1 representa a la izquierda y 10 representa a la derecha
+table(base_85$iden_pol_2)
+base_85$iden_pol_2_R_2 = revalue(base_85$iden_pol_2, c("1"="EI", "2"="EI","3"="I", "4"="I", "5"="C", "6"="C","7"="D", "8"="D","9"="ED", "10"="ED"))
+table(base_85$iden_pol_2_R_2)
+
+## Tabla de porcentajes
+table(base_85$iden_pol_2_R_2)
+table_5 <- table(base_85$iden_pol_2_R_2)
+prop.table(table_5)
+
+## Recodificación de variables sobre tensiones democráticas 
+### 1. Libertades/orden y seguridad: En las democracias se aspira a que haya libertades publicas y privadas y que haya orden publico y seguridad ciudadana En su caso, ¿a cual valor le da más importancia? 
+table(base_85$democracia_19)
+base_85$democracia_19_R = revalue(base_85$democracia_19, c("1"="1","2"="1","3"="1","4"="1","5"="2","6"="2","7"="3","8"="3","9"="3","10"="3", "88"="0","99"="0"))
+table(base_85$democracia_19_R)
+### 2.  Igualdad/ esfuerzo:Dónde se ubicaría Ud. en esta escala, en que 1 significa “los ingresos deberían hacerse más iguales, aunque no se premie el esfuerzo individual” y 10 significa “debería premiarse el esfuerzo individual, aunque se produzcan importantes diferencias de ingresos”?
+table(base_85$pobreza_62)
+base_85$pobreza_62_R = revalue(base_85$pobreza_62, c("1"="1","2"="1","3"="1","4"="1","5"="2","6"="3","7"="2","8"="3","9"="3","10"="3", "88"="0","99"="0"))
+table(base_85$pobreza_62_R)
+### 3. Estado benefactor/subsidiario : Ahora, respecto de quién debería tener la principal responsabilidad por el sustento económico de las personas, ¿Dónde se ubicaría Ud. en esta escala, en que 1 significa “la principal responsabilidad por el sustento económico de las personas está en el Estado” y 10 significa “la principal responsabilidad por el sustento económico de las personas está en las personas mismas”
+table(base_85$pobreza_63)
+base_85$pobreza_63_R = revalue(base_85$pobreza_63, c("1"="1","2"="1","3"="1","4"="1","5"="2","6"="2","7"="3","8"="3","9"="3","10"="3", "88"="0","99"="0"))
+table(base_85$pobreza_63_R)
+
+### Tablas de contingencia de variables recodificadas
+#### 1. iden_pol_2_R y democracia_19_R  % Filas y Columnas
+sjt.xtab(base_85$democracia_19_R,#filas 
+         base_85$iden_pol_2_R_2, #columnas
+         show.col.prc = T, show.row.prc = T, file = "liberalRecod.doc")
+#### 2. iden_pol_2_R y pobreza_62_R  % Filas y Columnas
+sjt.xtab(base_85$pobreza_62_R, #filas
+         base_85$iden_pol_2_R_2, #columnas
+         show.col.prc = T, show.row.prc = T, file = "MeritoRecod.doc")
+### 3. iden_pol_2_R y pobreza_63_R  % Filas y Columnas
+sjt.xtab(base_85$pobreza_63_R, #filas
+         base_85$iden_pol_2_R_2, #columnas
+         show.col.prc = T, show.row.prc = T, file = "EbenefactorRecod.doc")
