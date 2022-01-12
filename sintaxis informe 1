@@ -1,3 +1,15 @@
+## Encuesta CEP
+### Link: https://www.cepchile.cl/cep/encuestas-cep/encuestas-2010-2021/estudio-nacional-de-opinion-publica-n-85-septiembre-2021
+
+### Importar base de datos
+library(haven)
+base_85 <- read_sav("~/Downloads/encuesta_cep_ago2021-2/base_85.sav")
+View(base_85)
+
+## Variable numérica (avisar que la BBDD contiene de variables numéricas)
+base_85[sapply(base_85, is.numeric)] <- lapply(base_85[sapply(base_85, is.numeric)], as.factor)
+
+
 ## Recodificación Indentificación politica: Los conceptos de izquierda y derecha son útiles para resumir de una manera muy simplificada lo que piensa la gente en muchos temas. Me gustaría que por favor se clasificara en la escala que va de 1 a 10 donde 1 representa a la izquierda y 10 representa a la derecha
 table(base_85$iden_pol_2)
 base_85$iden_pol_2_R_2 = revalue(base_85$iden_pol_2, c("1"="EI", "2"="EI","3"="I", "4"="I", "5"="C", "6"="C","7"="D", "8"="D","9"="ED", "10"="ED"))
