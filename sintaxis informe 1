@@ -46,4 +46,67 @@ sjt.xtab(base_85$pobreza_62_R, #filas
 ### 3. iden_pol_2_R y pobreza_63_R  % Filas y Columnas
 sjt.xtab(base_85$pobreza_63_R, #filas
          base_85$iden_pol_2_R_2, #columnas
-         show.col.prc = T, show.row.prc = T, file = "EbenefactorRecod.doc")
+         show.col.prc = T, show.row.prc = T, file = "EbenefactorRecod.doc")## 10.1  Recodificación vaiable dependiente a dummy: Indentificación politica: Los conceptos de izquierda y derecha son útiles para resumir de una manera muy simplificada lo que piensa la gente en muchos temas. Me gustaría que por favor se clasificara en la escala que va de 1 a 10 donde 1 representa a la izquierda y 10 representa a la derecha
+table(base_85$iden_pol_2)
+base_85$iden_pol_2dummy = revalue(base_85$iden_pol_2, c("1"="1", "2"="1","3"="1", "4"="1", "5"="1", "6"="0","7"="0", "8"="0", "9"="0", "10"="0", "88"="0", "99"="0"))
+table(base_85$iden_pol_2dummy)
+
+## Recodificación de variables independientes
+
+### 1. Orden seguridad: En las democracias se aspira a que haya libertades publicas y privadas y que haya orden publico y seguridad ciudadana En su caso, ¿a cual valor le da más importancia? 
+table(base_85$democracia_19)
+base_85$democracia_19_Dummy = revalue(base_85$democracia_19, c("1"="0","2"="0","3"="0","4"="0","5"="0","6"="1","7"="1","8"="1","9"="1","10"="1", "88"="0","99"="0"))
+table(base_85$democracia_19_Dummy)
+### 2. Esfuerzo :Dónde se ubicaría Ud. en esta escala, en que 1 significa “los ingresos deberían hacerse más iguales, aunque no se premie el esfuerzo individual” y 10 significa “debería premiarse el esfuerzo individual, aunque se produzcan importantes diferencias de ingresos”?
+table(base_85$pobreza_62)
+base_85$pobreza_62_Dummy = revalue(base_85$pobreza_62, c("1"="0","2"="0","3"="0","4"="0","5"="0","6"="1","7"="1","8"="1","9"="1","10"="1", "88"="0","99"="0"))
+table(base_85$pobreza_62_Dummy)
+### 3. Persona: Ahora, respecto de quién debería tener la principal responsabilidad por el sustento económico de las personas, ¿Dónde se ubicaría Ud. en esta escala, en que 1 significa “la principal responsabilidad por el sustento económico de las personas está en el Estado” y 10 significa “la principal responsabilidad por el sustento económico de las personas está en las personas mismas”
+table(base_85$pobreza_63)
+base_85$pobreza_63_Dummy = revalue(base_85$pobreza_63, c("1"="0","2"="0","3"="0","4"="0","5"="0","6"="1","7"="1","8"="1","9"="1","10"="1", "88"="0","99"="0"))
+table(base_85$pobreza_63_Dummy)
+### 4. Interés en la politica: ¿Cuán interesado está Ud. en la política?
+table(base_85$interes_pol_1_b)
+base_85$interes_pol_1_b_Dummy = revalue(base_85$interes_pol_1_b, c("1"="1","2"="1","3"="1","4"="0","5"="0","8"="0","9"="0"))
+table(base_85$interes_pol_1_b_Dummy)
+
+
+### Variables numéricas
+base_85["iden_pol_2dummy"] <- as.numeric(as.character(base_85$iden_pol_2dummy))
+base_85["democracia_19_Dummy"] <- as.numeric(as.character(base_85$democracia_19_Dummy))
+base_85["pobreza_62_Dummy"] <- as.numeric(as.character(base_85$pobreza_62_Dummy))
+base_85["pobreza_63_Dummy"] <- as.numeric(as.character(base_85$pobreza_63_Dummy))
+base_85["base_85$interes_pol_1_b_Dummy"] <- as.numeric(as.character(base_85$sexo))
+
+
+###  Definir variables para regresión logistica
+
+##### Variable Dependiente: base_85$iden_pol_2dummy
+
+# Variable Independiente  1: Apoyo al orden y seguridad democracia_19_Dummy
+# Variable Independiente  2: Apoyo al esfuerzo pobreza_62_Dummy
+# Variable Independiente  3: Apoyo al la persona pobreza_63_Dummy
+# variable Independiente  4: Interés en la política base_85$interes_pol_1_b_Dummy
+
+
+
+#### modelos adicional m1 y m2 sin cbind()
+
+m1 = glm(base_85$iden_pol_2dummy ~ base_85$democracia_19_Dummy + 
+           base_85$pobreza_62_Dummy + base_85$pobreza_63_Dummy,
+         data = base_85,
+         binomial())
+summary(m1)
+
+m2 = glm(base_85$iden_pol_2dummy ~ base_85$democracia_19_Dummy + 
+           base_85$pobreza_62_Dummy + base_85$pobreza_63_Dummy + base_85$interes_pol_1_b_Dummy,
+         data = base_85,
+         binomial())
+summary(m2)
+
+#### Tabular Regresion Logistica Binaria de m1 y m1
+stargazer(m1, m2, title = "Modelos", align =TRUE, 
+          out = "Modelos.txt")
+        
+ 
+         
